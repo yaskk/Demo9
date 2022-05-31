@@ -207,7 +207,7 @@
             this.txtReorder.Size = new System.Drawing.Size(336, 20);
             this.txtReorder.TabIndex = 11;
             this.txtReorder.Tag = "Reorder Level";
-            
+            this.txtReorder.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
             // 
             // label7
             // 
@@ -226,7 +226,7 @@
             this.txtOnOrder.Size = new System.Drawing.Size(336, 20);
             this.txtOnOrder.TabIndex = 9;
             this.txtOnOrder.Tag = "On Order";
-            
+            this.txtOnOrder.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
             // 
             // btnAdd
             // 
@@ -256,7 +256,7 @@
             this.txtStock.Size = new System.Drawing.Size(336, 20);
             this.txtStock.TabIndex = 7;
             this.txtStock.Tag = "Stock";
-          
+            this.txtStock.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
             // 
             // label5
             // 
@@ -275,7 +275,7 @@
             this.txtUnitPrice.Size = new System.Drawing.Size(336, 20);
             this.txtUnitPrice.TabIndex = 5;
             this.txtUnitPrice.Tag = "Unit Price";
-
+            this.txtUnitPrice.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
             // 
             // label4
             // 
@@ -348,7 +348,7 @@
             this.cmbCategories.Size = new System.Drawing.Size(336, 21);
             this.cmbCategories.TabIndex = 17;
             this.cmbCategories.Tag = "Category";
-
+            this.cmbCategories.Validating += new System.ComponentModel.CancelEventHandler(this.cmb_Validating);
             // 
             // label10
             // 
@@ -369,7 +369,7 @@
             this.cmbSuppliers.Size = new System.Drawing.Size(336, 21);
             this.cmbSuppliers.TabIndex = 15;
             this.cmbSuppliers.Tag = "Supplier";
-
+            this.cmbSuppliers.Validating += new System.ComponentModel.CancelEventHandler(this.cmb_Validating);
             // 
             // label9
             // 
@@ -388,7 +388,7 @@
             this.txtQtyPerUnit.Size = new System.Drawing.Size(336, 20);
             this.txtQtyPerUnit.TabIndex = 3;
             this.txtQtyPerUnit.Tag = "Qty per Unit";
-
+            this.txtQtyPerUnit.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
             // 
             // label3
             // 
@@ -407,7 +407,8 @@
             this.txtProductName.Size = new System.Drawing.Size(336, 20);
             this.txtProductName.TabIndex = 1;
             this.txtProductName.Tag = "Product Name";
-
+            this.txtProductName.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Validating);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;

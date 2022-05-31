@@ -24,6 +24,7 @@ namespace DBProgrammingDemo9
         int lastProductId = 0;
         int? previousProductId;
         int? nextProductId;
+        int totalProductsCount;
 
         #region [Form Events]
 
@@ -36,6 +37,8 @@ namespace DBProgrammingDemo9
         {
             LoadSuppliers();
             LoadCategories();
+
+            LoadFirstProduct();
         }
 
         /// <summary>
@@ -45,7 +48,23 @@ namespace DBProgrammingDemo9
         /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            // change messages on status label
+            toolStripStatusLabel1.Text = "Adding a new product";
+            toolStripStatusLabel2.Text = "";
 
+            // clear all controls inside groupbox after adding a new product
+            ClearControls(grpProducts.Controls);
+
+            // load categories and suppliers back
+            LoadCategories();
+            LoadSuppliers();
+
+            // change buttons text and if they are enabled or disabled
+            btnSave.Text = "Create";
+            btnAdd.Enabled = false;
+            btnDelete.Enabled = false;
+            // for buttons first, last, next and previous
+            NavigationState(false);
         }
 
         /// <summary>
@@ -56,7 +75,22 @@ namespace DBProgrammingDemo9
         /// <param name="e"></param>
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // load products details through method
+                LoadProductDetails();
 
+                // change buttons text and if they are enabled or disabled
+                btnSave.Text = "Save";
+                btnAdd.Enabled = true;
+                btnDelete.Enabled = true;
+                NavigationState(true);
+                NextPreviousButtonManagement();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -66,7 +100,15 @@ namespace DBProgrammingDemo9
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                // change the progress bar
+                ProgressBar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -82,7 +124,7 @@ namespace DBProgrammingDemo9
         #endregion
 
         #region [Retrieves]
-        
+
         /// <summary>
         /// Load the Suppliers and bind the combobox
         /// </summary>
@@ -139,26 +181,37 @@ namespace DBProgrammingDemo9
             DataSet ds = new DataSet();
             ds = DataAccess.GetData(sqlStatements);
 
-            DataRow selectedProduct = ds.Tables[0].Rows[0];
-            
-            cmbSuppliers.SelectedValue = selectedProduct["SupplierId"];
-            cmbCategories.SelectedValue = selectedProduct["CategoryId"];
-            txtProductName.Text = selectedProduct["ProductName"].ToString();
-            txtQtyPerUnit.Text = selectedProduct["QuantityPerUnit"].ToString();
-            txtUnitPrice.Text = Convert.ToDouble(selectedProduct["UnitPrice"]).ToString("n2");
-            txtStock.Text = selectedProduct["UnitsInStock"].ToString();
-            txtOnOrder.Text = selectedProduct["UnitsOnOrder"].ToString();
-            txtReorder.Text = selectedProduct["ReorderLevel"].ToString();
-            chkDiscontinued.Checked = Convert.ToBoolean(selectedProduct["Discontinued"]);
+            // check if there is a row in the data set
+            if (ds.Tables[0].Rows.Count == 1)
+            {
+                DataRow selectedProduct = ds.Tables[0].Rows[0];
 
-            firstProductId = Convert.ToInt32(ds.Tables[1].Rows[0]["FirstProductId"]);
-            previousProductId = ds.Tables[1].Rows[0]["PreviousProductId"] != DBNull.Value ? Convert.ToInt32(ds.Tables["Table1"].Rows[0]["PreviousProductId"]) : (int?)null;
-            nextProductId = ds.Tables[1].Rows[0]["NextProductId"] != DBNull.Value ? Convert.ToInt32(ds.Tables["Table1"].Rows[0]["NextProductId"]) : (int?)null;
-            lastProductId = Convert.ToInt32(ds.Tables[1].Rows[0]["LastProductId"]);
-            currentRecord = Convert.ToInt32(ds.Tables[1].Rows[0]["RowNumber"]);
+                cmbSuppliers.SelectedValue = selectedProduct["SupplierId"];
+                cmbCategories.SelectedValue = selectedProduct["CategoryId"];
+                txtProductName.Text = selectedProduct["ProductName"].ToString();
+                txtQtyPerUnit.Text = selectedProduct["QuantityPerUnit"].ToString();
+                txtUnitPrice.Text = Convert.ToDouble(selectedProduct["UnitPrice"]).ToString("n2");
+                txtStock.Text = selectedProduct["UnitsInStock"].ToString();
+                txtOnOrder.Text = selectedProduct["UnitsOnOrder"].ToString();
+                txtReorder.Text = selectedProduct["ReorderLevel"].ToString();
+                chkDiscontinued.Checked = Convert.ToBoolean(selectedProduct["Discontinued"]);
 
-            //Which item we are on in the count
-            toolStripStatusLabel1.Text = $"Displaying product {currentRecord} of ?";
+                firstProductId = Convert.ToInt32(ds.Tables[1].Rows[0]["FirstProductId"]);
+                previousProductId = ds.Tables[1].Rows[0]["PreviousProductId"] != DBNull.Value ? Convert.ToInt32(ds.Tables["Table1"].Rows[0]["PreviousProductId"]) : (int?)null;
+                nextProductId = ds.Tables[1].Rows[0]["NextProductId"] != DBNull.Value ? Convert.ToInt32(ds.Tables["Table1"].Rows[0]["NextProductId"]) : (int?)null;
+                lastProductId = Convert.ToInt32(ds.Tables[1].Rows[0]["LastProductId"]);
+                currentRecord = Convert.ToInt32(ds.Tables[1].Rows[0]["RowNumber"]);
+                totalProductsCount = Convert.ToInt32(ds.Tables[2].Rows[0]["ProductCount"]);
+
+                //Which item we are on in the count
+                toolStripStatusLabel1.Text = $"Displaying product {currentRecord} of {totalProductsCount}";
+            }
+            else
+            {
+                MessageBox.Show("The product no longer exists");
+                LoadFirstProduct();
+            }
+
             NextPreviousButtonManagement();
         }
 
@@ -217,7 +270,7 @@ namespace DBProgrammingDemo9
                     break;
                 case "btnNext":
                     currentProductId = nextProductId.Value;
-                    
+
                     break;
             }
 
@@ -229,8 +282,8 @@ namespace DBProgrammingDemo9
         #region [Validation Events and Methods]
 
         /// <summary>
-        
-       
+
+
         /// <summary>
         /// Numeric validation 
         /// </summary>
@@ -244,7 +297,7 @@ namespace DBProgrammingDemo9
         #endregion
 
         #region [Form Helpers]
-                
+
         /// <summary>
         /// Clear the form inputs and set checkbox unchecked
         /// </summary>
@@ -300,5 +353,53 @@ namespace DBProgrammingDemo9
         }
 
         #endregion
+
+        private void LoadFirstProduct()
+        {
+            currentProductId = Convert.ToInt32(DataAccess.GetValue("SELECT TOP(1) ProductId FROM Products ORDER BY ProductName"));
+            LoadProductDetails();
+        }
+
+        private void cmb_Validating(object sender, CancelEventArgs e)
+        {
+            // type cast the sender as combobox
+            ComboBox cmb = (ComboBox)sender;
+
+            // string to hold the error message
+            string errorMsg = null;
+
+            // check if a valid value is selected on the combobox
+            // if the user has not selected a value, the combobox will return a null string
+            if (cmb.SelectedIndex < 1 || string.IsNullOrEmpty(cmb.SelectedValue.ToString()))
+            {
+                errorMsg = $"{cmb.Tag} is required.";
+            }
+
+            errProvider.SetError(cmb, errorMsg);
+        }
+
+        private void txt_Validating(object sender, CancelEventArgs e)
+        {
+            // type cast the sender as textbox
+            TextBox textBox = (TextBox)sender;
+
+            // string to hold the error message
+            string errorMsg = null;
+
+            // check if the textbox is empty
+            if (textBox.Text == string.Empty)
+            {
+                errorMsg = $"{textBox.Tag.ToString()} is required";
+            }
+
+            // check if the input is a numeric value
+            // needs to check the DB to see which ones are numeric
+            if ((textBox.Name == "txtUnitPrice" || textBox.Name == "txtStock" || textBox.Name == "txtOnOrder" || textBox.Name == "txtReorder") && !IsNumeric(textBox.Text))
+            {
+                errorMsg = $"{textBox.Tag} is not numeric";
+            }
+
+            errProvider.SetError(textBox, errorMsg);
+        }
     }
 }
