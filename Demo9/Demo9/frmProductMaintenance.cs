@@ -102,8 +102,28 @@ namespace DBProgrammingDemo9
         {
             try
             {
-                // change the progress bar
-                ProgressBar();
+                if (ValidateChildren(ValidationConstraints.Enabled))
+                {
+                    // load the progress bar
+                    ProgressBar();
+
+                    // check if the product already has a ProductId
+                    if (txtProductId.Text == String.Empty)
+                    {
+                        // save the new product
+                        CreateProduct();
+                    }
+                    else
+                    {
+                        // update the product
+                        SaveProductChanges();
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Check if data is valid");
+                }
             }
             catch (Exception ex)
             {
@@ -118,7 +138,21 @@ namespace DBProgrammingDemo9
         /// <param name="e"></param>
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            string sqlDeleteQuery = $"DELETE FROM Products WHERE ProductID = {txtProductId.Text}";
 
+            int rowAffected = DataAccess.SendData(sqlDeleteQuery);
+
+            if(rowAffected == 1)
+            {
+                MessageBox.Show("Product deleted successfully");
+
+                // refresh the form
+                LoadFirstProduct();
+            }
+            else
+            {
+                MessageBox.Show("Product was not deleted");
+            }
         }
 
         #endregion
@@ -186,6 +220,7 @@ namespace DBProgrammingDemo9
             {
                 DataRow selectedProduct = ds.Tables[0].Rows[0];
 
+                txtProductId.Text = selectedProduct["ProductId"].ToString();
                 cmbSuppliers.SelectedValue = selectedProduct["SupplierId"];
                 cmbCategories.SelectedValue = selectedProduct["CategoryId"];
                 txtProductName.Text = selectedProduct["ProductName"].ToString();
@@ -373,6 +408,7 @@ namespace DBProgrammingDemo9
             if (cmb.SelectedIndex < 1 || string.IsNullOrEmpty(cmb.SelectedValue.ToString()))
             {
                 errorMsg = $"{cmb.Tag} is required.";
+                e.Cancel = true;
             }
 
             errProvider.SetError(cmb, errorMsg);
@@ -390,6 +426,7 @@ namespace DBProgrammingDemo9
             if (textBox.Text == string.Empty)
             {
                 errorMsg = $"{textBox.Tag.ToString()} is required";
+                e.Cancel = true;
             }
 
             // check if the input is a numeric value
@@ -397,9 +434,56 @@ namespace DBProgrammingDemo9
             if ((textBox.Name == "txtUnitPrice" || textBox.Name == "txtStock" || textBox.Name == "txtOnOrder" || textBox.Name == "txtReorder") && !IsNumeric(textBox.Text))
             {
                 errorMsg = $"{textBox.Tag} is not numeric";
+                e.Cancel = true;
             }
 
             errProvider.SetError(textBox, errorMsg);
         }
+
+        private void CreateProduct()
+        {
+            string sqlInsertQuery = $"INSERT INTO Products " +
+                $"(ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) " +
+                $"VALUES ('{txtProductName.Text.Trim()}', {cmbSuppliers.SelectedValue}, {cmbCategories.SelectedValue}, '{txtQtyPerUnit.Text.Trim()}', " +
+                $"{txtUnitPrice.Text.Trim()}, {txtStock.Text.Trim()}, {txtOnOrder.Text.Trim()}, {txtReorder.Text.Trim()}, {(chkDiscontinued.Checked ? 1 : 0)}) ";
+
+            int rowsAffected = DataAccess.SendData(sqlInsertQuery);
+
+            if (rowsAffected == 1)
+            {
+                MessageBox.Show("Product created successfully");
+            }
+            else
+            {
+                MessageBox.Show("Insert product was not successful");
+            }
+
+            // change controls to display the same as in the beginning
+            btnAdd.Enabled = true;
+            btnDelete.Enabled = true;
+            btnSave.Text = "Save";
+            LoadFirstProduct();
+            NavigationState(true);
+
+        }
+
+        private void SaveProductChanges()
+        {
+            string sqlUpdateQuery = $"UPDATE Products SET ProductName = '{txtProductName.Text.Trim()}', SupplierId = {cmbSuppliers.SelectedValue}, CategoryId = {cmbCategories.SelectedValue}, QuantityPerUnit = '{txtQtyPerUnit.Text.Trim()}', " +
+                $"UnitPrice = {txtUnitPrice.Text.Trim()}, UnitsInStock = {txtStock.Text.Trim()}, UnitsOnOrder = {txtOnOrder.Text.Trim()}, ReOrderLevel = {txtReorder.Text.Trim()}, Discontinued = {(chkDiscontinued.Checked ? 1 : 0)} " +
+                $"WHERE ProductID = {txtProductId.Text}";
+
+            int rowsAffected = DataAccess.SendData(sqlUpdateQuery);
+
+            if (rowsAffected == 1)
+            {
+                MessageBox.Show("Product updated");
+            }
+            else
+            {
+                MessageBox.Show("No rows updated");
+            }
+        }
+
     }
 }
