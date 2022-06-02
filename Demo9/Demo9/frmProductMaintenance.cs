@@ -138,21 +138,18 @@ namespace DBProgrammingDemo9
         /// <param name="e"></param>
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            string sqlDeleteQuery = $"DELETE FROM Products WHERE ProductID = {txtProductId.Text}";
-
-            int rowAffected = DataAccess.SendData(sqlDeleteQuery);
-
-            if(rowAffected == 1)
+            try
             {
-                MessageBox.Show("Product deleted successfully");
-
-                // refresh the form
-                LoadFirstProduct();
+                if (MessageBox.Show("Are you sure you want to delete?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    DeleteProduct();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Product was not deleted");
+                MessageBox.Show(ex.Message);
             }
+
         }
 
         #endregion
@@ -485,5 +482,36 @@ namespace DBProgrammingDemo9
             }
         }
 
+        private void DeleteProduct()
+        {
+            string sqlCheckOrderDetails = $"SELECT COUNT(*) FROM [Order Details] WHERE ProductId = {txtProductId.Text.Trim()}";
+
+            int rowsAffected = Convert.ToInt32(DataAccess.GetValue(sqlCheckOrderDetails));
+
+            if(rowsAffected == 0)
+            {
+                string sqlDeleteQuery = $"DELETE FROM Products WHERE ProductID = {txtProductId.Text}";
+
+                int rowAffected = DataAccess.SendData(sqlDeleteQuery);
+
+                if (rowAffected == 1)
+                {
+                    MessageBox.Show("Product deleted successfully");
+
+                    // refresh the form
+                    LoadFirstProduct();
+                }
+                else
+                {
+                    MessageBox.Show("Product was not deleted");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Product cannot be deleted");
+            }
+
+           
+        }
     }
 }

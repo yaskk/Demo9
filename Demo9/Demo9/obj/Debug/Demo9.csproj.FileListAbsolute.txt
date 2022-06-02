@@ -20,3 +20,14 @@ C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\Demo
 C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\Demo9\Demo9\Demo9\bin\Debug\Demo9.exe.config
 C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\Demo9\Demo9\Demo9\bin\Debug\Demo9.exe
 C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\Demo9\Demo9\Demo9\bin\Debug\Demo9.pdb
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\bin\Debug\Demo9.exe.config
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\bin\Debug\Demo9.exe
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\bin\Debug\Demo9.pdb
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.csproj.AssemblyReference.cache
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.csproj.SuggestedBindingRedirects.cache
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\DBProgrammingDemo9.frmProductMaintenance.resources
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.Properties.Resources.resources
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.csproj.GenerateResource.cache
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.csproj.CoreCompileInputs.cache
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.exe
+C:\Users\yasmi\OneDrive\Desktop\NBCC\Spring Term\Database Programming\Demos\DBProgrammingDemo9\Demo9\Demo9\obj\Debug\Demo9.pdb

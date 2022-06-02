@@ -97,5 +97,10 @@ namespace DBProgrammingDemo9
 
             return rowsAffected;
         }
+
+        public static string replaceSQL(string sql)
+        {
+            return sql.Replace("'", "''");
+        }
     }
 }
